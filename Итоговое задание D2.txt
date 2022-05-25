@@ -1,0 +1,142 @@
+py manage.py shell
+>>>from news.models import *
+
+#создаем двух пользователей:
+>>>u1 = User.objects.create_user('Александр') 
+>>>u2 = User.objects.create_user('Евгений')
+проверяем: u1, u2
+
+# Создаем два объекта модели Author, связанные с пользователями:
+>>>Author.objects.create(author_User=u1)
+>>>Author.objects.create(author_User=u2)
+
+# Добавляем 4 категории в модель Category:
+>>>Category.objects.create(name='Мой огород')
+>>>Category.objects.create(name='Животные')
+>>>Category.objects.create(name='Цветы')
+>>>Category.objects.create(name='Рецепты заготовок')
+
+*Метод create() создает и сохраняет обьект.
+
+# Добавить 2 статьи и 1 новость.
+>>>autor1 = Author.objects.get(id=1)
+>>>autor2 = Author.objects.get(id=2)
+проверяем: >>>autor1
+>>>Post.objects.create(author=autor1, category_Type='NW', title='sometitle', text='somebigtext')
+>>>Post.objects.create(author=autor1, category_Type='ARTICLE', title='sometitle', text='somebigtext')
+>>>Post.objects.create(author=autor2, category_Type='ARTICLE', title='sometitle', text='somebigtext')
+
+# Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий).
+>>>Post.objects.get(id=1).post_Category.add(Category.objects.get(id=1))
+>>>Post.objects.get(id=1).post_Category.add(Category.objects.get(id=2))
+>>>Post.objects.get(id=2).post_Category.add(Category.objects.get(id=3))
+>>>Post.objects.get(id=2).post_Category.add(Category.objects.get(id=4))
+>>>Post.objects.get(id=2).post_Category.add(Category.objects.get(id=2))
+>>>Post.objects.get(id=2).post_Category.add(Category.objects.get(id=4))
+>>>Post.objects.get(id=3).post_Category.add(Category.objects.get(id=2))
+>>>
+
+
+# Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+>>>Comment.objects.create(comment_Post=Post.objects.get(id=1), comment_User=Author.objects.get(id=1).author_User, texst='Обалденно!') 
+>>>Comment.objects.create(comment_Post=Post.objects.get(id=2), comment_User=Author.objects.get(id=2).author_User, texst='Не соглашусь')
+>>>Comment.objects.create(comment_Post=Post.objects.get(id=2), comment_User=Author.objects.get(id=1).author_User, texst='Хорошо')
+>>>Comment.objects.create(comment_Post=Post.objects.get(id=1), comment_User=Author.objects.get(id=2).author_User, texst='Не очень...')
+
+# Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).dislike()
+>>> Comment.objects.get(id=1).dislike()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=2).dislike()
+
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).dislike()
+>>> Comment.objects.get(id=3).dislike()
+>>> Comment.objects.get(id=3).dislike()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=4).dislike()
+
+
+
+>>> Post.objects.get(id=1).dislike()
+>>> Post.objects.get(id=1).dislike()
+>>> Post.objects.get(id=1).like()
+>>> Post.objects.get(id=1).like()
+>>> Post.objects.get(id=1).like()
+>>> Post.objects.get(id=1).like()
+>>> Post.objects.get(id=1).like()
+>>> 
+>>> Post.objects.get(id=2).like()
+>>> Post.objects.get(id=2).like()
+>>> Post.objects.get(id=2).like()
+>>> Post.objects.get(id=2).dislike()
+>>> Post.objects.get(id=2).dislike()
+>>> Post.objects.get(id=2).dislike()
+
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).like() 
+>>> Post.objects.get(id=3).dislike() 
+>>> Post.objects.get(id=3).dislike() 
+>>> Post.objects.get(id=3).dislike() 
+>>> Post.objects.get(id=3).dislike() 
+>>> Post.objects.get(id=3).dislike() 
+
+проверяем: 
+>>> Comment.objects.get(id=1).rating
+>>> Post.objects.get(id=1).rating
+>>> Post.objects.get(id=3).rating
+
+
+
+#Дальше update_rating() не удалось продвинуться, он не работает, и свой не удается написать.
+
+
+# Обновить рейтинги пользователей.
+
+>>>Author.objects.get(id=1).update_rating()
+>>>Author.objects.get(id=2).update_rating()
+>>>Author.objects.get(id=1).rating_Author
+>>>Author.objects.get(id=2).rating_Author
+
+# Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+>>>
+Author.objects.filter(author_User=u1).values("rating_Author", "author_User")
+
+
+# Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
+>>>post1 = Post.objects.get(id=1)
+>>>post2 = Post.objects.get(id=2)
+>>>post3 = Post.objects.get(id=3)
+
+>>>postRating = Post.objects.filter(???).values("author", "date_Creation", "rating", "title", "post_Category")
+>>>
+
+
+# Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+>>>Comment.objects.filter(???).values("texst", "date_Creation", "rating")
+
